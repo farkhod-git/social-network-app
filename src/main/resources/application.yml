@@ -1,0 +1,15 @@
+jwt:
+    access-token:
+        expiry: 3600
+        secret-key: '*&t8&TBD98OTN#*O7DTO7*#TB87#TBS*Q&TQ#D(S*B@O*&D(&@^F#'
+spring:
+    application:
+        name: social-network-app
+    datasource:
+        password: 7410
+        url: jdbc:postgresql://localhost:5432/social_network
+        username: admin
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
