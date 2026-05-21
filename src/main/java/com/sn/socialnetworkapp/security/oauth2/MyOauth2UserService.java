@@ -1,4 +1,4 @@
-package com.sn.socialnetworkapp.service;
+package com.sn.socialnetworkapp.security.oauth2;
 
 import com.sn.socialnetworkapp.entity.User;
 import com.sn.socialnetworkapp.repository.UserRepository;
@@ -18,7 +18,6 @@ import java.util.UUID;
 public class MyOauth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -38,7 +37,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
             User user = new User();
             user.setEmail(email);
             user.setFirstname(name);
-            user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+            user.setPassword(UUID.randomUUID().toString());
             userRepository.save(user);
         }
 

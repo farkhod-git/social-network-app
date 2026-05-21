@@ -17,13 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class AbsGeneralEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
-
+public abstract class AbsUpdatableEntity extends AbsGeneralEntity {
     @CreationTimestamp
-    LocalDateTime createdAt;
-
+    LocalDateTime updatedAt;
 }

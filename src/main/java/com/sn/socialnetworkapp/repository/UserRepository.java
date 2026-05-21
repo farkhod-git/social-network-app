@@ -1,4 +1,9 @@
 package com.sn.socialnetworkapp.repository;
 
-public interface UserRepository {
+import com.sn.socialnetworkapp.entity.User;
+
+import java.util.Optional;
+
+public interface UserRepository extends GeneralJpaRepository<User> {
+    Optional<User> findByEmail(String email);
 }
