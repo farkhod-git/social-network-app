@@ -1,26 +1,32 @@
 package com.sn.socialnetworkapp.entity;
 
-import com.sn.socialnetworkapp.entity.abs.AbsGeneralEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User extends AbsGeneralEntity implements UserDetails {
+@EntityListeners(AuditingEntityListener.class)
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     String firstname;
@@ -33,10 +39,13 @@ public class User extends AbsGeneralEntity implements UserDetails {
     @Column(nullable = false)
     String password;
 
-    boolean active = true;
+    boolean active = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     Attachment avatar;
+
+    @CreationTimestamp
+    LocalDateTime createdAt;
 
     @LastModifiedDate
     LocalDateTime updatedAt;

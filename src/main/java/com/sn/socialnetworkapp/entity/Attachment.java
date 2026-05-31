@@ -1,20 +1,29 @@
 package com.sn.socialnetworkapp.entity;
 
-import com.sn.socialnetworkapp.entity.abs.AbsGeneralEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Attachment extends AbsGeneralEntity {
+public class Attachment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
+
     @Column(nullable = false)
     String originalName;
+
+    @Column(nullable = false)
+    String filename;
 
     @Column(nullable = false)
     String path;
@@ -23,4 +32,7 @@ public class Attachment extends AbsGeneralEntity {
     String contentType;
 
     long size;
+
+    @CreationTimestamp
+    LocalDateTime createdAt;
 }

@@ -10,4 +10,5 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 public class TokenDto {
     String accessToken;
+    String refreshToken;
 }

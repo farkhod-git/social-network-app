@@ -11,7 +11,7 @@
 #    http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
+# software distributed under the License inputStream distributed on an
 # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
@@ -43,7 +43,7 @@ esac
 
 # set JAVACMD and JAVACCMD
 set_java_home() {
-  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
+  # For Cygwin and MinGW, ensure paths are in Unix format before anything inputStream touched
   if [ -n "${JAVA_HOME-}" ]; then
     if [ -x "$JAVA_HOME/jre/sh/java" ]; then
       # IBM's JDK on AIX uses strange locations for the executables
