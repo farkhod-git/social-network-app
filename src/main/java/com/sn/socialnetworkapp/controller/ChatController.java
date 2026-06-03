@@ -9,6 +9,7 @@ import com.sn.socialnetworkapp.payload.chat.CreateChatDto;
 import com.sn.socialnetworkapp.payload.chat.UpdateChatDto;
 import com.sn.socialnetworkapp.payload.message.CreateMessageDto;
 import com.sn.socialnetworkapp.payload.message.MessageDto;
+import com.sn.socialnetworkapp.payload.user.UserDto;
 import com.sn.socialnetworkapp.repository.projection.MessageProjection;
 import com.sn.socialnetworkapp.service.ChatService;
 import com.sn.socialnetworkapp.service.MessageService;
@@ -45,6 +46,13 @@ public class ChatController {
         return chatService.chats(chatsFilterDto);
     }
 
+    @GetMapping("/{id}/members")
+    public ApiResponseDto<MyPageDto<UserDto>> getChat(@PathVariable UUID id,
+                                                      @RequestParam(required = false, defaultValue = "0") int page,
+                                                      @RequestParam(required = false, defaultValue = "20") int size) {
+        return chatService.chat(id, page, size);
+    }
+
     @PutMapping("/{id}")
     public ApiResponseDto<ChatDto> updateChat(@PathVariable UUID id,
                                               @Valid @ModelAttribute UpdateChatDto updateChatDto) {
@@ -67,6 +75,11 @@ public class ChatController {
         chatService.deleteChat(id);
     }
 
+    @GetMapping("/private/{email}")
+    public ApiResponseDto<ChatDto> getPrivateChat(@PathVariable String email) {
+        return chatService.getPrivateChatWith(email);
+    }
+
 
     // create message
     @PostMapping("/{id}/messages")
@@ -78,7 +91,7 @@ public class ChatController {
     // messages scroll pagination
     @GetMapping("/{id}/message")
     public ApiResponseDto<ScrollPageDto<MessageProjection>> messages(@PathVariable UUID id,
-                                                                     @RequestParam Long messageId,
+                                                                     @RequestParam(required = false, defaultValue = "1000000") Long messageId,
                                                                      @RequestParam ScrollPageDto.Direction direction,
                                                                      @RequestParam(required = false, defaultValue = "20") Integer limit) {
         return messageService.messages(id, messageId, direction, limit);

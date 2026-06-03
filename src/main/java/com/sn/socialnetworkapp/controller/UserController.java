@@ -1,6 +1,7 @@
 package com.sn.socialnetworkapp.controller;
 
 import com.sn.socialnetworkapp.payload.ApiResponseDto;
+import com.sn.socialnetworkapp.payload.MyPageDto;
 import com.sn.socialnetworkapp.payload.user.ProfileDto;
 import com.sn.socialnetworkapp.payload.user.UpdateUserDto;
 import com.sn.socialnetworkapp.payload.user.UserDto;
@@ -36,6 +37,13 @@ public class UserController {
     @DeleteMapping("/avatar")
     public void deleteAvatar() {
         userService.deleteAvatar();
+    }
+
+    @GetMapping
+    public ApiResponseDto<MyPageDto<UserDto>> users(@RequestParam(required = false) String search,
+                                                    @RequestParam(required = false, defaultValue = "0") int page,
+                                                    @RequestParam(required = false, defaultValue = "20") int size) {
+        return userService.users(search, page, size);
     }
 
 }

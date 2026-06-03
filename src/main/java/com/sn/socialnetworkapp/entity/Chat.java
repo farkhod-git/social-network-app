@@ -35,9 +35,6 @@ public class Chat {
     @Enumerated(EnumType.STRING)
     ChatTypeEnum type;
 
-    @ManyToMany
-    List<User> members;
-
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     User createdBy;

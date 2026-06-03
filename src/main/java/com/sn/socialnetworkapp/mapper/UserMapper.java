@@ -7,9 +7,13 @@ import com.sn.socialnetworkapp.payload.user.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = AttachmentMapper.class)
 public interface UserMapper {
     UserDto toDto(User user);
 
     ProfileDto toProfileDto(User user);
+
+    List<UserDto> toDtoList(List<User> content);
 }

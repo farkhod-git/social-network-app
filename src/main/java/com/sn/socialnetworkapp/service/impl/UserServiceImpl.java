@@ -4,22 +4,26 @@ import com.sn.socialnetworkapp.entity.Attachment;
 import com.sn.socialnetworkapp.entity.User;
 import com.sn.socialnetworkapp.exceptions.MyBadRequestException;
 import com.sn.socialnetworkapp.exceptions.MyNotFoundException;
+import com.sn.socialnetworkapp.mapper.PageMapper;
 import com.sn.socialnetworkapp.mapper.UserMapper;
 import com.sn.socialnetworkapp.payload.ApiResponseDto;
+import com.sn.socialnetworkapp.payload.MyPageDto;
 import com.sn.socialnetworkapp.payload.user.ProfileDto;
 import com.sn.socialnetworkapp.payload.user.UpdateUserDto;
 import com.sn.socialnetworkapp.payload.user.UserDto;
 import com.sn.socialnetworkapp.repository.AttachmentRepository;
+import com.sn.socialnetworkapp.repository.ChatMemberRepository;
+import com.sn.socialnetworkapp.repository.ChatRepository;
 import com.sn.socialnetworkapp.repository.UserRepository;
 import com.sn.socialnetworkapp.service.UserService;
-import com.sn.socialnetworkapp.util.AppConstants;
 import com.sn.socialnetworkapp.util.CurrentUserUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -28,6 +32,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AttachmentRepository attachmentRepository;
+    private final PageMapper pageMapper;
+    private final ChatRepository chatRepository;
+    private final ChatMemberRepository chatMemberRepository;
 
     @Override
     public ApiResponseDto<ProfileDto> profile() {
@@ -72,5 +79,20 @@ public class UserServiceImpl implements UserService {
 
         currentUser.setAvatar(null);
         userRepository.save(currentUser);
+    }
+
+    @Override
+    public ApiResponseDto<MyPageDto<UserDto>> users(String search, int page, int size) {
+        User user = userRepository.findByEmail(search).orElse(null);
+        if (user == null) {
+            return ApiResponseDto.success(MyPageDto.empty());
+        }
+
+        MyPageDto<UserDto> customPageDto = new  MyPageDto<>();
+        customPageDto.setPage(0);
+        customPageDto.setSize(1);
+        customPageDto.setContent(userMapper.toDtoList(Collections.singletonList(user)));
+
+        return ApiResponseDto.success(customPageDto);
     }
 }

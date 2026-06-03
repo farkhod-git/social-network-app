@@ -12,7 +12,9 @@ import java.util.UUID;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProfileDto {
+    UUID id;
     String firstname;
     String lastname;
+    String email;
     AttachmentDto avatar;
 }

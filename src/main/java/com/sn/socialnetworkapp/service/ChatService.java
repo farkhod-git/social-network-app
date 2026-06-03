@@ -6,6 +6,7 @@ import com.sn.socialnetworkapp.payload.chat.ChatDto;
 import com.sn.socialnetworkapp.payload.chat.ChatsFilterDto;
 import com.sn.socialnetworkapp.payload.chat.CreateChatDto;
 import com.sn.socialnetworkapp.payload.chat.UpdateChatDto;
+import com.sn.socialnetworkapp.payload.user.UserDto;
 
 import java.util.Set;
 import java.util.UUID;
@@ -24,4 +25,8 @@ public interface ChatService {
     ApiResponseDto<ChatDto> addMembers(UUID id, Set<UUID> memberIds);
 
     ApiResponseDto<ChatDto> updateAvatar(UUID id, UUID avatarId);
+
+    ApiResponseDto<MyPageDto<UserDto>> chat(UUID id, int page, int size);
+
+    ApiResponseDto<ChatDto> getPrivateChatWith(String email);
 }

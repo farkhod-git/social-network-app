@@ -16,6 +16,7 @@ import com.sn.socialnetworkapp.repository.AttachmentRepository;
 import com.sn.socialnetworkapp.repository.ChatRepository;
 import com.sn.socialnetworkapp.repository.MessageRepository;
 import com.sn.socialnetworkapp.repository.projection.MessageProjection;
+import com.sn.socialnetworkapp.service.MessageReadService;
 import com.sn.socialnetworkapp.service.MessageService;
 import com.sn.socialnetworkapp.util.CurrentUserUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class MessageServiceImpl implements MessageService {
     private final AttachmentRepository attachmentRepository;
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
+    private final MessageReadService messageReadService;
 
     @Override
     public ApiResponseDto<MessageDto> createMessage(UUID chatId, CreateMessageDto createMessageDto) {
@@ -41,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
 
         User currentUser = CurrentUserUtil.getCurrentUser();
 
-        Chat chat = chatRepository.findByIdAndMembersContains(chatId, currentUser)
+        Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new MyNotFoundException("Chat not found"));
 
         Attachment media = null;
@@ -72,14 +74,22 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public ApiResponseDto<ScrollPageDto<MessageProjection>> messages(UUID chatId, Long messageId, ScrollPageDto.Direction direction, Integer limit) {
-        Chat chat = chatRepository.findByIdAndMembersContains(chatId, CurrentUserUtil.getCurrentUser())
-                .orElseThrow(() -> new MyNotFoundException("Chat not found"));
+        boolean exists = chatRepository.existsById(chatId);
+        if (!exists) {
+            throw new MyNotFoundException("Chat not found");
+        }
 
         final List<MessageProjection> messages;
 
         if (direction == ScrollPageDto.Direction.DOWN)
             messages = messageRepository.scrollDown(chatId, messageId, limit);
         else messages = messageRepository.scrollUp(chatId, messageId, limit);
+
+        List<Long> messageIds = messages.stream()
+                .map(MessageProjection::getId)
+                .toList();
+
+        messageReadService.read(messageIds);
 
         return ApiResponseDto.success(new ScrollPageDto<>(messages, direction));
     }

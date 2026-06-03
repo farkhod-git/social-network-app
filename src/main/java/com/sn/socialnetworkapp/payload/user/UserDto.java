@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -18,6 +17,4 @@ public class UserDto {
     String lastname;
     String email;
     AttachmentDto avatar;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
 }
